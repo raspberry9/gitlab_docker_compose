@@ -23,7 +23,7 @@ services:
         image: sameersbn/gitlab:9.4.5
         restart: always
         environment:
-        - GITLAB_HOST=192.168.1.200
+        - GITLAB_HOST=__________________________PLEASE_ENTER_IP_OR_URL__________________________________
         - GITLAB_PORT=10080
         - GITLAB_SSH_PORT=10022
         - GITLAB_SECRETS_DB_KEY_BASE=____________PLEASE_CHANGE_THIS____________________

@@ -1,0 +1,48 @@
+version: '2'
+services:
+    gitlab-postgresql:
+        image: sameersbn/postgresql:9.6-2
+        restart: always
+        environment:
+        - DB_NAME=gitlabhq_production
+        - DB_USER=gitlab
+        - DB_PASS=__________________________PLEASE_CHANGE_THIS____________________________________
+        - DB_EXTENSION=pg_trgm
+        volumes:
+        - ./volumes/postgresql:/var/lib/postgresql
+        ports:
+        - "5432:5432"
+    gitlab-redis:
+        image: sameersbn/redis:latest
+        restart: always
+        volumes:
+        - ./volumes/redis:/var/lib/redis
+        ports:
+        - "6379:6379"
+    gitlab:
+        image: sameersbn/gitlab:9.4.5
+        restart: always
+        environment:
+        - GITLAB_HOST=192.168.1.200
+        - GITLAB_PORT=10080
+        - GITLAB_SSH_PORT=10022
+        - GITLAB_SECRETS_DB_KEY_BASE=____________PLEASE_CHANGE_THIS____________________
+        - GITLAB_SECRETS_SECRET_KEY_BASE=________PLEASE_CHANGE_THIS____________________
+        - GITLAB_SECRETS_OTP_KEY_BASE=___________PLEASE_CHANGE_THIS____________________
+        - DB_ADAPTER=postgresql
+        - DB_HOST=172.17.0.1
+        - DB_PORT=5432
+        - DB_NAME=gitlabhq_production
+        - DB_USER=gitlab
+        - DB_PASS=__________________________PLEASE_CHANGE_THIS____________________________________
+        - REDIS_HOST=172.17.0.1
+        - REDIS_PORT=6379
+        - GITLAB_TIMEZONE=Asia/Seoul
+        volumes:
+        - ./volumes/gitlab:/home/git/data
+        ports:
+        - "10022:22"
+        - "10080:80"
+        links:
+        - gitlab-postgresql:postgresql
+        - gitlab-redis:redisio
